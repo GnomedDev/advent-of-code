@@ -4,7 +4,7 @@ use aoc_runner_derive::{aoc, aoc_generator};
 enum UnknownColumn {
     X,
     Y,
-    Z
+    Z,
 }
 
 impl From<char> for UnknownColumn {
@@ -13,17 +13,16 @@ impl From<char> for UnknownColumn {
             'X' => Self::X,
             'Y' => Self::Y,
             'Z' => Self::Z,
-            _ => unimplemented!()
+            _ => unimplemented!(),
         }
-    }    
+    }
 }
-
 
 #[derive(Clone, Copy, Debug)]
 pub enum Choice {
     Rock,
     Paper,
-    Scissors
+    Scissors,
 }
 
 impl Choice {
@@ -52,11 +51,10 @@ impl From<char> for Choice {
             'A' => Self::Rock,
             'B' => Self::Paper,
             'C' => Self::Scissors,
-            _ => unimplemented!()
+            _ => unimplemented!(),
         }
     }
 }
-
 
 #[derive(Clone, Copy)]
 pub struct Move {
@@ -69,23 +67,23 @@ impl Move {
         const LOSE: u16 = 0;
         const DRAW: u16 = 3;
         const WIN: u16 = 6;
-    
+
         let selection_score = player.selection_score() as u16;
         let outcome_score = match (player, opponent) {
             (Choice::Paper, Choice::Rock) => WIN,
             (Choice::Rock, Choice::Paper) => LOSE,
-    
+
             (Choice::Scissors, Choice::Paper) => WIN,
             (Choice::Paper, Choice::Scissors) => LOSE,
-    
+
             (Choice::Rock, Choice::Scissors) => WIN,
-            (Choice::Scissors, Choice::Rock) => LOSE,            
-    
-            (Choice::Rock, Choice::Rock) |
-            (Choice::Paper, Choice::Paper) |
-            (Choice::Scissors, Choice::Scissors) => DRAW
+            (Choice::Scissors, Choice::Rock) => LOSE,
+
+            (Choice::Rock, Choice::Rock)
+            | (Choice::Paper, Choice::Paper)
+            | (Choice::Scissors, Choice::Scissors) => DRAW,
         };
-    
+
         selection_score + outcome_score
     }
 
@@ -112,9 +110,8 @@ impl Move {
         };
 
         Self::outcome(to_move, self.opponent)
-    } 
+    }
 }
-
 
 #[aoc_generator(day2)]
 pub fn move_parser(input: &str) -> Vec<Move> {
@@ -130,23 +127,26 @@ pub fn move_parser(input: &str) -> Vec<Move> {
         if let (Some(unknown), Some(opponent)) = (unknown, opponent) {
             moves.push(Move {
                 unknown: UnknownColumn::from(unknown),
-                opponent: Choice::from(opponent)
+                opponent: Choice::from(opponent),
             })
         } else {
-            break
+            break;
         }
     }
 
     moves
-} 
+}
 
 #[aoc(day2, part1)]
 pub fn calculate_total_score(input: &[Move]) -> u16 {
-    input.iter().copied().map(Move::outcome_if_unknown_player).sum()
+    input
+        .iter()
+        .copied()
+        .map(Move::outcome_if_unknown_player)
+        .sum()
 }
 
 #[aoc(day2, part2)]
 pub fn calculate_max_score(input: &[Move]) -> u16 {
     input.iter().copied().map(Move::part2_outcome).sum()
 }
-

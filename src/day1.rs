@@ -13,7 +13,6 @@ pub fn elf_parser(input: &str) -> Vec<u32> {
         .collect()
 }
 
-
 #[aoc(day1, part1)]
 pub fn max_elves(elves: &[u32]) -> u32 {
     elves.iter().copied().max().expect("At least one elf!")
